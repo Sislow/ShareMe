@@ -13,7 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textSize="40sp"
+        android:textSize="24sp"
+        
         android:textColor="#99CC00"
         android:text="" />
     
@@ -22,7 +23,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/Title"
-      	android:paddingTop="10sp"
+      	
         
         android:textColor="#FFF"
         android:background="#33B5E5"
