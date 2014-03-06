@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <color android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/red" name="red">#ffff0000</color>
+    <color android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/green" name="green">#99CC00</color>
+    <color android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/white" name="white">#ffffffff</color>
+    <color android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/blue" name="blue">#33b5e5</color>
+</resources>
