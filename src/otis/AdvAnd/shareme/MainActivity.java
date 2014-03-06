@@ -1,6 +1,11 @@
 package otis.AdvAnd.shareme;
 
 
+import java.util.List;
+
+import otis.AdvAnd.DAO.User;
+import otis.AdvAnd.DAO.UserData;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -20,6 +25,9 @@ public class MainActivity extends Activity {
 	// RSA Key
 	//9E:5F:97:2E:93:FE:FC:82:12:A9:34:9C:82:4F:D5:83
 
+	//List<User> Users = new UserData().getUser();
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,6 +70,7 @@ public class MainActivity extends Activity {
 			for (int i = 0; i < size; i++) {
 			  names[i] = accounts[i].name;
 			}
+			
 			//Pulls phone number
 			TelephonyManager tMgr = (TelephonyManager) MainActivity.this.getSystemService(Context.TELEPHONY_SERVICE);
 			String mPhoneNumber = tMgr.getLine1Number();
@@ -71,6 +80,7 @@ public class MainActivity extends Activity {
 			
 			// Assign first account to string
 			String username = names[0].toString();
+			
 			
 			// Bundle information and passed to the class for checking by user
 			Bundle B = new Bundle();

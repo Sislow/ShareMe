@@ -1,5 +1,11 @@
 package otis.AdvAnd.shareme;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import otis.AdvAnd.DAO.User;
+import otis.AdvAnd.DAO.UserData;
+import otis.AdvAnd.NFCController.NFCMain;
 import android.app.Activity;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
@@ -15,11 +21,14 @@ public class CheckUser extends Activity {
 	String name;
 	String mPhone;
 	TextView checkUser;
+	TextView checkPhone;
+	User user;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.check_main);
+		
 		
 		// Obtain Bundle from last Activity
 		Bundle B = getIntent().getExtras();
@@ -38,6 +47,10 @@ public class CheckUser extends Activity {
 		// set title to gmail account
 		checkUser.setText(name);
 		
+		checkPhone = (TextView) findViewById(R.id.phoneTitle);
+		checkPhone.setText(mPhone);
+		
+		
 		Button begin = (Button) findViewById(R.id.Login);
 		begin.setOnClickListener(handle);
 		
@@ -48,9 +61,16 @@ public class CheckUser extends Activity {
 		@Override
 		public void onClick(View v) {
 			// Iterate through information (not set yet)
-			checkUser.setText(mPhone);
+			
+			
+			
+			
+			
+			
 			
 		}
+
+		
 		
 	};
 }
