@@ -7,5 +7,6 @@
     <string name="share_me">Share Me</string>
     <string name="begin">begin</string>
     <string name="cont">Continue</string>
+	<string name="accountInfo">Account Info</string>
 
 </resources>

@@ -2,19 +2,15 @@ package otis.AdvAnd.shareme;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
-import otis.AdvAnd.DAO.User;
-import otis.AdvAnd.DAO.UserData;
 import otis.AdvAnd.NFCController.NFCMain;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,66 +18,89 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class CheckUser extends Activity {
-	
-	
-	String name;
-	String actualname;
-	String mPhone;
-	TextView checkUser;
-	TextView checkPhone;
-	EditText nameHolder;
-	User user;
 
+	
+	String username;
+	String name;
+	String mPhone;
+	TextView Number;
+	TextView Email;
+	EditText fillName;
+	String filename = "ContactInfo";
+	FileOutputStream outputStream;
+	File file;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.check_main);
 		
+		file = new File(this.getFilesDir(), filename);
+		System.out.println(this.getFilesDir().toString());
 		
-		// Obtain Bundle from last Activity
-		Bundle B = getIntent().getExtras();
-		name = B.getString("val1");
-		mPhone = B.getString("val2");
-		
+		Toast.makeText(CheckUser.this, "Collecting Your information...", Toast.LENGTH_LONG).show();
 		
 		
-		if (!NfcAdapter.getDefaultAdapter(this).isEnabled()) // changed to check if user file exist if not create
-	    {
-	        Toast.makeText(getApplicationContext(), "Please activate NFC and press Back to return to the application!", Toast.LENGTH_LONG).show();
-	        startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-	    }
+		fillName = (EditText) findViewById(R.id.Name);
+		name = fillName.getText().toString();
 		
-		
-		
-		checkUser = (TextView) findViewById(R.id.Title);
-		// set title to gmail account
-		checkUser.setText(name);
-		
-		checkPhone = (TextView) findViewById(R.id.phoneTitle);
-		checkPhone.setText(mPhone);
-		
-		nameHolder = (EditText) findViewById(R.id.Name);
-		actualname = nameHolder.getEditableText().toString();
-		
-		
+		Number = (TextView) findViewById(R.id.Title);
+		Email = (TextView) findViewById(R.id.phoneTitle);
+
+		run();
 		Button begin = (Button) findViewById(R.id.Login);
 		begin.setOnClickListener(handle);
 		
+	}
+	
+	public void run(){
+				
+				// pulls gmail account
+				final AccountManager manager = AccountManager.get(CheckUser.this);
+				final Account[] accounts = manager.getAccountsByType("com.google");
+				final int size = accounts.length;
+				String[] names = new String[size];
+				
+				for (int i = 0; i < size; i++) {
+				  names[i] = accounts[i].name;
+				}
+				
+				//Pulls phone number
+				TelephonyManager tMgr = (TelephonyManager) CheckUser.this.getSystemService(Context.TELEPHONY_SERVICE);
+				mPhone = tMgr.getLine1Number();
+				
+				
+				// print out to console to check
+				System.out.println(names[0].toString());
+				
+				// Assign first account to string
+				username = names[0].toString();
+				
+				Number.setText(mPhone);
+				Email.setText(username);
 	}
 	
 		View.OnClickListener handle = new View.OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
-			// Iterate through information (not set yet)
-			User creation = new User();
-			creation.setUsername(name);
-			creation.setmPhone(mPhone);
-			creation.setName(actualname);
-			UserData save = new UserData();
-			save.setUser(creation);
 			
+			String string = name + "\n" + username + "\n" + mPhone;
+			try {
+				  outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+				  outputStream.write(string.getBytes());
+				  outputStream.close();
+				} catch (Exception e) {
+				  e.printStackTrace();
+				}
+	
+			
+			
+			if(file.exists()) {
+				System.out.println("file.exists()");
+				Intent share = new Intent(CheckUser.this, NFCMain.class);
+				startActivity(share);
+			}
 			
 			
 		}

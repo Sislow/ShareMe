@@ -5,17 +5,22 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="16"
         android:targetSdkVersion="19" />
 
+    
+    
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    
+    <uses-feature android:name="android.hardware.nfc" android:required="true"/>
     
     
     
@@ -31,12 +36,21 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>  
         </activity>
+        
+        <activity 
+            android:name="otis.AdvAnd.shareme.SharedPref">
+        </activity>
+        
         <activity 
             android:name="otis.AdvAnd.shareme.CheckUser">
-            
         </activity>
+        
+        <activity
+            android:name="otis.AdvAnd.NFCController.NFCMain">  
+        </activity>
+        
     </application>
 
 </manifest>

@@ -1,93 +1,83 @@
 package otis.AdvAnd.NFCController;
 
-import otis.AdvAnd.shareme.R;
+import java.io.File;
+
+import org.apache.http.client.HttpClient;
+
 import android.app.Activity;
 import android.app.PendingIntent;
-import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
-import android.nfc.NfcAdapter.CreateNdefMessageCallback;
 import android.nfc.NfcEvent;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class NFCMain extends Activity implements CreateNdefMessageCallback {
+public class NFCMain extends Activity {
 
 	NfcAdapter mNfcAdapter;
 	TextView textView;
+	PendingIntent mNfcPendingIntent;
+
+	IntentFilter[] mNdefExchangeFilters;
+
+	NdefMessage mNdefMessage;
+	NdefMessage msgs[];
+	NdefRecord msg;
+
+	private FileUriCallback mFileUriCallback;
+
+
+	// List of URIs to provide to Android Beam
 	
+	String transferFile = "ContactInfo";
+   
+    File requestFile = new File(this.getFilesDir(), transferFile);
+    
+    
+    // Get a URI for the File and add it to the list of URIs
+    
+	/**
+	 * Callback that Android Beam file transfer calls to get
+	 * files to share
+	 */
+	private class FileUriCallback implements NfcAdapter.CreateBeamUrisCallback {
+
+		public FileUriCallback() {
+
+		}
+		
+		/**
+		 * Create content URIs as needed to share with another device
+		 */
+		@Override
+		public Uri[] createBeamUris(NfcEvent event) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	}
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
 		
+
+		// Android Beam file transfer is available, continue
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-		
-		if (mNfcAdapter == null) {
-            Toast.makeText(this, "NFC is not available", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
-        // Register callback
-        mNfcAdapter.setNdefPushMessageCallback(this, this);
-		
-		
+
+		/*
+		 * Instantiate a new FileUriCallback to handle requests for
+		 * URIs
+		 */
+		mFileUriCallback = new FileUriCallback();
+
+		// Set the dynamic callback for URI requests.
+		mNfcAdapter.setBeamPushUrisCallback(mFileUriCallback,this);
+
+
+
 	}
-	
-	   @Override
-	    public NdefMessage createNdefMessage(NfcEvent event) {
-	        String text = ("Beam me up, Android!\n\n" +
-	                "Beam Time: " + System.currentTimeMillis());
-	        NdefMessage msg = new NdefMessage(
-	                new NdefRecord[] { createMime(
-	                        "application/vnd.com.example.android.beam", text.getBytes())
-	         /**
-	          * The Android Application Record (AAR) is commented out. When a device
-	          * receives a push with an AAR in it, the application specified in the AAR
-	          * is guaranteed to run. The AAR overrides the tag dispatch system.
-	          * You can add it back in to guarantee that this
-	          * activity starts when receiving a beamed message. For now, this code
-	          * uses the tag dispatch system.
-	          */
-	          //,NdefRecord.createApplicationRecord("com.example.android.beam")
-	        });
-	        return msg;
-	    }
-
-	    private NdefRecord createMime(String string, byte[] bytes) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-		@Override
-	    public void onResume() {
-	        super.onResume();
-	        // Check to see that the Activity started due to an Android Beam
-	        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
-	            processIntent(getIntent());
-	        }
-	    }
-
-	    @Override
-	    public void onNewIntent(Intent intent) {
-	        // onResume gets called after this to handle the intent
-	        setIntent(intent);
-	    }
-
-	    /**
-	     * Parses the NDEF Message from the intent and prints to the TextView
-	     */
-	    void processIntent(Intent intent) {
-	        textView = (TextView) findViewById(R.id.textview);
-	        Parcelable[] rawMsgs = intent.getParcelableArrayExtra(
-	                NfcAdapter.EXTRA_NDEF_MESSAGES);
-	        // only one message sent during the beam
-	        NdefMessage msg = (NdefMessage) rawMsgs[0];
-	        // record 0 contains the MIME type, record 1 is the AAR, if present
-	        textView.setText(new String(msg.getRecords()[0].getPayload()));
-	    }
-	}
-
+}
