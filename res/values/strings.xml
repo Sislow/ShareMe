@@ -8,5 +8,9 @@
     <string name="begin">begin</string>
     <string name="cont">Continue</string>
 	<string name="accountInfo">Account Info</string>
-
+	<!-- Button text -->
+    <string name="btn_logout_from_google">Logout from Google</string>
+    <string name="btn_revoke_access">Revoke Access</string>
+    <string name="btn_share_info">Share Information</string>
+    <string name="nuller">null</string>
 </resources>
